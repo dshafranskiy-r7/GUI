@@ -66,7 +66,7 @@ Tests for the refactored `load_ports()` method in `PortMaster/pylibs/harbourmast
 ## Requirements
 
 The tests require the following dependencies:
-- Python 3.9 or newer
+- Python 3.12 or newer (Python 3.9+ may work but 3.12 is recommended)
 - loguru (included in PortMaster/exlibs)
 - coverage (for coverage reports)
 
