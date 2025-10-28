@@ -17,6 +17,7 @@ from pathlib import Path
 ################################################################################
 ## Insert our extra modules.
 PYLIB_PATH    = Path(__file__).parent / 'pylibs'
+DEPS_PATH     = Path(__file__).parent / 'deps'
 PYLIB_ZIP     = Path(__file__).parent / 'pylibs.zip'
 PYLIB_ZIP_MD5 = Path(__file__).parent / 'pylibs.zip.md5'
 
@@ -25,6 +26,10 @@ if not (Path(__file__).parent / '.git').is_dir() and not (Path(__file__).parent 
         if PYLIB_PATH.is_dir():
             print("- removing old pylibs.")
             shutil.rmtree(PYLIB_PATH)
+
+        if DEPS_PATH.is_dir():
+            print("- removing old deps.")
+            shutil.rmtree(DEPS_PATH)
 
         print("- extracting new pylibs.")
         with zipfile.ZipFile(PYLIB_ZIP, 'r') as zf:
@@ -52,6 +57,9 @@ if not (Path(__file__).parent / '.git').is_dir() and not (Path(__file__).parent 
 ## HACK D:
 __builtins__.PYLIB_PATH = PYLIB_PATH
 
+# Add dependencies path first, then pylibs
+if DEPS_PATH.is_dir():
+    sys.path.insert(0, str(DEPS_PATH))
 sys.path.insert(0, str(PYLIB_PATH))
 
 ## STUFF :D
