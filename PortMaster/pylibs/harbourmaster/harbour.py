@@ -530,101 +530,17 @@ class HarbourMaster():
 
         return (self.ports_dir / file_name)
 
-    @timeit
-    def load_ports(self):
+    def _load_ports_phase1(self, port_files, ports_info):
         """
-        Find all installed ports, because ports can be installed by zips we need to recheck every time.
+        Phase 1: Load all *.port.json files, fix any issues with them.
+        
+        Returns:
+            tuple: (all_ports, ports_files, all_items) dictionaries
         """
-        port_files = list(self.ports_dir.glob('*/*.port.json')) + list(self.ports_dir.glob('*/port.json'))
-        port_files.sort()
-
-        self.installed_ports = {}
-        self.broken_ports = {}
-        self.unknown_ports = []
-        all_items = {}
-        unknown_files = []
-
         all_ports = {}
         ports_files = {}
-        file_renames = {}
-
-        ports_info = self.ports_info()
-        self.__PORT_INFO_CACHE.clear()
-
-        self.callback.message("  - {}".format(_("Loading Ports.")))
-
-        """
-        This is a bit of a heavy function but it does the following.
-
-        Phase 1:
-        - Load all *.port.json files, fix any issues with them
-    
-        Phase 2:
-        - Check all files/dirs in the ports_dir, see if they are "owned" by a port, find any renamed files.
-
-        Phase 3:
-        - Find any new ports, create the port.json files as necessary.
-
-        Phase 4:
-        - Finalise any data, figure out if the ports are broken etc.
-
-        DONE.
-
-        """
-
-        ## Rename old <portname>.port.json to port.json.
-        port_dirs = {}
-
-        for port_file in port_files:
-            port_dir = port_file.parent.name
-
-            port_dirs.setdefault(port_dir, {})[port_file.name] = port_file
-
-        changes = False
-        for port_dir in port_dirs:
-            if port_dir == 'alephone':
-                continue
-
-            # Rename the port.json
-            port_jsons = list(port_dirs[port_dir].keys())
-
-            if len(port_jsons) == 1:
-                if 'port.json' not in port_jsons:
-                    port_dir_path = port_dirs[port_dir][port_jsons[0]].parent
-
-                    ## Rename
-                    logger.debug(f"rename {port_dir_path / port_jsons[0]} to {port_dir_path / 'port.json'}")
-                    (port_dir_path / port_jsons[0]).rename(port_dir_path / 'port.json')
-                    changes = True
-
-            elif len(port_jsons) == 2:
-                if 'port.json' not in port_jsons:
-                    ## HRMMmmmmm
-                    logger.debug(f'Multiple port.json files in {port_dir}: {port_jsons}')
-                    continue
-
-                else:
-                    # Remove the old one.
-                    port_jsons.remove('port.json')
-                    port_dir_path = port_dirs[port_dir][port_jsons[0]].parent
-                    logger.debug(f"unlink {port_dir_path / port_jsons[0]}")
-                    (port_dir_path / port_jsons[0]).unlink()
-                    changes = True
-
-            else:
-                if 'port.json' not in port_jsons:
-                    ## HRMMmmmmm
-                    logger.debug(f'Multiple port.json files in {port_dir}: {port_jsons}')
-                    continue
-
-        del port_dirs
-
-        if changes:
-            # Reload the port_files list.
-            port_files = list(self.ports_dir.glob('*/*.port.json')) + list(self.ports_dir.glob('*/port.json'))
-
-
-        ## Phase 1: Load all the known ports with port.json files
+        all_items = {}
+        
         for port_file in port_files:
             port_info = self._load_port_info(port_file)
 
@@ -670,8 +586,23 @@ class HarbourMaster():
 
             all_ports[port_info['name']] = port_info
             ports_files[port_info['name']] = port_file
+            
+        return all_ports, ports_files, all_items
 
-        ## Phase 2: Check all files
+    def _load_ports_phase2(self, all_ports, all_items):
+        """
+        Phase 2: Check all files/dirs in the ports_dir, see if they are "owned" by a port, find any renamed files.
+        
+        Args:
+            all_ports: Dictionary of all loaded ports
+            all_items: Dictionary mapping items to port names
+            
+        Returns:
+            tuple: (unknown_files, file_renames) lists/dicts
+        """
+        unknown_files = []
+        file_renames = {}
+        
         for file_item in self._iter_ports_dir():
             ## Skip these
             if file_item.name.lower() in (
@@ -754,6 +685,102 @@ class HarbourMaster():
                     continue
 
             unknown_files.append(file_name)
+            
+        return unknown_files, file_renames
+
+    @timeit
+    def load_ports(self):
+        """
+        Find all installed ports, because ports can be installed by zips we need to recheck every time.
+        """
+        port_files = list(self.ports_dir.glob('*/*.port.json')) + list(self.ports_dir.glob('*/port.json'))
+        port_files.sort()
+
+        self.installed_ports = {}
+        self.broken_ports = {}
+        self.unknown_ports = []
+
+        ports_info = self.ports_info()
+        self.__PORT_INFO_CACHE.clear()
+
+        self.callback.message("  - {}".format(_("Loading Ports.")))
+
+        """
+        This is a bit of a heavy function but it does the following.
+
+        Phase 1:
+        - Load all *.port.json files, fix any issues with them
+    
+        Phase 2:
+        - Check all files/dirs in the ports_dir, see if they are "owned" by a port, find any renamed files.
+
+        Phase 3:
+        - Find any new ports, create the port.json files as necessary.
+
+        Phase 4:
+        - Finalise any data, figure out if the ports are broken etc.
+
+        DONE.
+
+        """
+
+        ## Rename old <portname>.port.json to port.json.
+        port_dirs = {}
+
+        for port_file in port_files:
+            port_dir = port_file.parent.name
+
+            port_dirs.setdefault(port_dir, {})[port_file.name] = port_file
+
+        changes = False
+        for port_dir in port_dirs:
+            if port_dir == 'alephone':
+                continue
+
+            # Rename the port.json
+            port_jsons = list(port_dirs[port_dir].keys())
+
+            if len(port_jsons) == 1:
+                if 'port.json' not in port_jsons:
+                    port_dir_path = port_dirs[port_dir][port_jsons[0]].parent
+
+                    ## Rename
+                    logger.debug(f"rename {port_dir_path / port_jsons[0]} to {port_dir_path / 'port.json'}")
+                    (port_dir_path / port_jsons[0]).rename(port_dir_path / 'port.json')
+                    changes = True
+
+            elif len(port_jsons) == 2:
+                if 'port.json' not in port_jsons:
+                    ## HRMMmmmmm
+                    logger.debug(f'Multiple port.json files in {port_dir}: {port_jsons}')
+                    continue
+
+                else:
+                    # Remove the old one.
+                    port_jsons.remove('port.json')
+                    port_dir_path = port_dirs[port_dir][port_jsons[0]].parent
+                    logger.debug(f"unlink {port_dir_path / port_jsons[0]}")
+                    (port_dir_path / port_jsons[0]).unlink()
+                    changes = True
+
+            else:
+                if 'port.json' not in port_jsons:
+                    ## HRMMmmmmm
+                    logger.debug(f'Multiple port.json files in {port_dir}: {port_jsons}')
+                    continue
+
+        del port_dirs
+
+        if changes:
+            # Reload the port_files list.
+            port_files = list(self.ports_dir.glob('*/*.port.json')) + list(self.ports_dir.glob('*/port.json'))
+
+
+        ## Phase 1: Load all the known ports with port.json files
+        all_ports, ports_files, all_items = self._load_ports_phase1(port_files, ports_info)
+
+        ## Phase 2: Check all files
+        unknown_files, file_renames = self._load_ports_phase2(all_ports, all_items)
 
         # from pprint import pprint
         # pprint(all_items)
