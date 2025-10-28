@@ -6,13 +6,11 @@ import unittest
 import sys
 from pathlib import Path
 
-# Add the PortMaster directories to the path
+# Add the PortMaster pylibs directory to the path
 portmaster_base = Path(__file__).parent.parent.parent / 'PortMaster'
 portmaster_pylibs = portmaster_base / 'pylibs'
-portmaster_exlibs = portmaster_base / 'exlibs'
 
 sys.path.insert(0, str(portmaster_pylibs))
-sys.path.insert(0, str(portmaster_exlibs))
 
 # Import after adding to path
 try:

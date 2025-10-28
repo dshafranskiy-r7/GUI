@@ -35,7 +35,7 @@
     "ghcr.io/devcontainers/features/git:1": {}
   },
 
-  "postCreateCommand": "pip install -r requirements.txt && pip install pysdl2-dll",
+  "postCreateCommand": "pip install -r requirements.txt",
 
   "forwardPorts": [],
 
