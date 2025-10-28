@@ -47,11 +47,60 @@ for lang_dir in $POT_DIR/* ; do
     fi
 done
 
+echo "Exporting dependencies with Poetry"
+# Create a temporary directory for dependencies
+DEPS_DIR="PortMaster/deps"
+rm -rf "$DEPS_DIR"
+mkdir -p "$DEPS_DIR"
+
+# Generate requirements.txt from pyproject.toml using Python's tomllib
+python3 << 'PYTHON_SCRIPT'
+import tomllib
+import os
+
+# Read pyproject.toml
+with open('pyproject.toml', 'rb') as f:
+    data = tomllib.load(f)
+
+# Extract dependencies
+deps = data['tool']['poetry']['dependencies']
+reqs = []
+for pkg, version in deps.items():
+    if pkg == 'python':
+        continue
+    # Convert version format
+    if isinstance(version, str):
+        if version.startswith('^'):
+            reqs.append(f"{pkg}>={version[1:]}")
+        else:
+            reqs.append(f"{pkg}=={version}")
+    else:
+        reqs.append(pkg)
+
+# Write to requirements file
+os.makedirs('PortMaster/deps', exist_ok=True)
+with open('PortMaster/deps/requirements.txt', 'w') as f:
+    f.write('\n'.join(reqs))
+
+print("Generated requirements.txt")
+PYTHON_SCRIPT
+
+# Install dependencies to the deps directory
+pip install -r "$DEPS_DIR/requirements.txt" -t "$DEPS_DIR" --no-deps --quiet
+
+# Clean up unnecessary files from dependencies
+find "$DEPS_DIR" -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+find "$DEPS_DIR" -type d -name "*.dist-info" -exec rm -rf {} + 2>/dev/null || true
+find "$DEPS_DIR" -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+find "$DEPS_DIR" -name "*.pyc" -delete
+find "$DEPS_DIR" -name "*.pyo" -delete
+rm -f "$DEPS_DIR/requirements.txt"
+
 echo "Creating pylibs.zip"
 cd PortMaster
 
 rm -f pylibs.zip
-zip -9r pylibs.zip exlibs/ pylibs/ \
+zip -9r pylibs.zip pylibs/ deps/ \
     -x \*__pycache__\*/\* \
     -x \*.DS_Store \
     -x ._\* \
@@ -62,7 +111,7 @@ cd ..
 echo "Creating PortMaster.zip"
 zip -9r PortMaster.zip PortMaster/ \
     -x PortMaster/pylibs/\* \
-    -x PortMaster/exlibs/\* \
+    -x PortMaster/deps/\* \
     -x PortMaster/config/\* \
     -x PortMaster/themes/\* \
     -x PortMaster/libs/\*.squashfs \

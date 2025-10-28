@@ -190,3 +190,4 @@ runtimes*.zip
 Install*PortMaster.sh
 *.portmaster.zip
 pm_devices.cfg
+PortMaster/deps/
