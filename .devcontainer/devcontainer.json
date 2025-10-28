@@ -1,0 +1,43 @@
+{
+  "name": "PortMaster Development",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.linting.flake8Path": "flake8",
+        "python.formatting.provider": "none",
+        "python.testing.unittestEnabled": true,
+        "python.testing.unittestArgs": [
+          "-v",
+          "-s",
+          "./tests",
+          "-p",
+          "test*.py"
+        ],
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/*.pyc": true
+        }
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy"
+      ]
+    }
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "postCreateCommand": "pip install -r requirements.txt && pip install pysdl2-dll",
+
+  "forwardPorts": [],
+
+  "remoteUser": "vscode"
+}

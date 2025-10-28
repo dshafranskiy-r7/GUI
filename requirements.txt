@@ -1,0 +1,20 @@
+# PortMaster Development Requirements
+# Test dependencies for unittest (Python standard library)
+
+# Note: unittest is part of Python's standard library and doesn't need to be installed.
+# However, we include dependencies that may be useful for testing:
+
+# Code coverage for tests
+coverage>=7.0.0
+
+# Mock objects for testing
+# (unittest.mock is part of stdlib, but this provides backports for older Python versions if needed)
+
+# For testing with temporary files and directories
+# (tempfile is part of stdlib)
+
+# For assertions and test utilities
+# (already in unittest)
+
+# Development dependencies
+loguru>=0.7.0  # For logging (used in main codebase)
