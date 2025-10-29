@@ -29,6 +29,15 @@ PortMaster is a convenient script designed to facilitate the downloading and ins
 
 [Install](https://portmaster.games/installation.html)
 
+# Building
+
+PortMaster uses a Python setuptools-based build system. See [BUILDING.md](BUILDING.md) for detailed build instructions.
+
+Quick start:
+```bash
+python3 -m portmaster.build.release stable
+```
+
 # Translations
 
 If you would like to help out with translations please see our [crowdin page](https://crowdin.com/project/portmaster).
