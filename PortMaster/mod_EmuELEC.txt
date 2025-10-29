@@ -1,1 +1,0 @@
-../resources/platforms/config/mod_EmuELEC.txt

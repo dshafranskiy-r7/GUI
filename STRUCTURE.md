@@ -84,13 +84,12 @@ Main application code:
   - `default_theme/` - Default GUI theme
   - `locales/` - Internationalization files
   - GUI modules (pySDL2gui.py, pugscene.py, pugtheme.py, utility.py)
-- **`pugwash`**: Main GUI application entry point
-- **`harbourmaster`**: CLI tool for port management
-- **Symlinks**: For backward compatibility, symbolic links point to files in other directories:
-  - `exlibs` → `../dependencies/exlibs`
-  - Binary files → `../resources/binaries/*/`
-  - Config files → `../resources/platforms/config/`
-  - Platform directories → `../resources/platforms/*/`
+- **`pugwash`**: Main GUI application entry point - references `dependencies/exlibs/` for external libraries
+- **`harbourmaster`**: CLI tool for port management - references `dependencies/exlibs/` for external libraries
+
+The Python scripts have been updated to reference the new file locations directly:
+- `EXLIB_PATH` points to `../dependencies/exlibs/`
+- Build scripts copy platform config files from `resources/platforms/config/` during packaging
 
 ## Backward Compatibility
 
@@ -103,8 +102,10 @@ To maintain backward compatibility with existing scripts and code, symbolic link
 
 The build process has been updated to work with the new structure:
 
-1. **Development**: Work with the reorganized structure using symlinks
-2. **Packaging**: `build/scripts/do_release.sh` creates `pylibs.zip` that includes both `pylibs/` and `exlibs/`
+1. **Development**: Work with the reorganized structure, scripts reference new paths
+2. **Packaging**: 
+   - `build/scripts/do_release.sh` creates `pylibs.zip` from `dependencies/exlibs/` and `PortMaster/pylibs/`
+   - Platform config files from `resources/platforms/config/` are copied into `PortMaster.zip` during build
 3. **Distribution**: Platform-specific scripts copy appropriate resources from `resources/platforms/`
 
 ## Running Locally
@@ -114,7 +115,7 @@ For development, run from the repository root:
 python3 PortMaster/pugwash
 ```
 
-The symlinks ensure all dependencies and resources are accessible.
+The Python scripts reference `dependencies/exlibs/` directly for external dependencies.
 
 ## Building Releases
 
@@ -135,4 +136,4 @@ From the repository root:
 2. **Maintainability**: Easier to find and modify platform-specific configurations
 3. **Scalability**: Adding new platforms or architectures is straightforward
 4. **Best Practices**: Follows Python/Bash project conventions
-5. **Backward Compatible**: Existing functionality preserved through symlinks
+5. **Direct References**: Scripts reference files in their organized locations without indirection

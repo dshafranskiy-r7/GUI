@@ -60,18 +60,29 @@ for lang_dir in $POT_DIR/* ; do
 done
 
 echo "Creating pylibs.zip"
-cd PortMaster
+# Create temporary structure for packaging
+rm -rf /tmp/pm_pylibs_pkg
+mkdir -p /tmp/pm_pylibs_pkg
+cp -r PortMaster/pylibs /tmp/pm_pylibs_pkg/
+cp -r dependencies/exlibs /tmp/pm_pylibs_pkg/
 
-rm -f pylibs.zip
-zip -9r pylibs.zip exlibs/ pylibs/ \
+cd /tmp/pm_pylibs_pkg
+zip -9r /tmp/pylibs.zip exlibs/ pylibs/ \
     -x \*__pycache__\*/\* \
     -x \*.DS_Store \
     -x ._\* \
     -x \*NotoSans\*.ttf
 
+mv /tmp/pylibs.zip "$OLDPWD/PortMaster/pylibs.zip"
+cd "$OLDPWD"
+rm -rf /tmp/pm_pylibs_pkg
+
 cd ..
 
 echo "Creating PortMaster.zip"
+# First, temporarily copy config files to PortMaster for packaging
+cp resources/platforms/config/*.txt PortMaster/
+
 zip -9r PortMaster.zip PortMaster/ \
     -x PortMaster/pylibs/\* \
     -x PortMaster/exlibs/\* \
@@ -84,6 +95,9 @@ zip -9r PortMaster.zip PortMaster/ \
     -x PortMaster/pugwash.txt \
     -x PortMaster/harbourmaster.txt \
     -x '*.DS_Store'
+
+# Remove temporary files
+rm PortMaster/mod_*.txt PortMaster/libgl_*.txt
 
 if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     echo "Creating Installers"
