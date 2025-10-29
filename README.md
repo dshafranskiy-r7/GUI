@@ -29,6 +29,10 @@ PortMaster is a convenient script designed to facilitate the downloading and ins
 
 [Install](https://portmaster.games/installation.html)
 
+# Repository Structure
+
+This repository has been reorganized for better maintainability. See [STRUCTURE.md](STRUCTURE.md) for details on the new folder organization.
+
 # Translations
 
 If you would like to help out with translations please see our [crowdin page](https://crowdin.com/project/portmaster).

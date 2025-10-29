@@ -2,6 +2,18 @@
 #
 # SPDX-License-Identifier: MIT
 #
+# PortMaster Release Build Script
+# 
+# This script should be run from the repository root directory.
+# It creates PortMaster.zip for distribution.
+#
+# The restructured repository layout:
+# - build/scripts/ - Build scripts (this file)
+# - build/tools/ - Build utilities  
+# - dependencies/exlibs/ - External Python libraries
+# - resources/binaries/ - Platform-specific executables
+# - resources/platforms/ - OS-specific configurations
+#
 
 # Directory where .pot file is located
 POT_DIR="PortMaster/pylibs/locales"
