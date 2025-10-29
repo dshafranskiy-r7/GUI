@@ -9,7 +9,7 @@ POT_FILES=("messages" "themes")
 
 cp PortMaster/pugwash{,.bak}
 
-python3 tools/pm_release.py $*
+python3 build/tools/pm_release.py $*
 
 awk -F"'" '/PORTMASTER_VERSION = / {print $2}' PortMaster/pugwash > PortMaster/version
 cp PortMaster/version version
@@ -83,7 +83,7 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
             echo "Downloading Runtimes for $RUNTIME_ARCH."
             mkdir -p runtimes
             cd runtimes
-            ../tools/download_runtimes.sh
+            ../build/tools/download_runtimes.sh
             zip -9 "../runtimes.${RUNTIME_ARCH}.zip" *
             cd ..
             rm -fRv runtimes
@@ -101,13 +101,13 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     mkdir -p pm_release
     cd pm_release
     cp ../PortMaster.zip .
-    cp ../tools/installer.sh .
+    cp ../build/tools/installer.sh .
     cd ..
 
     # Remove old installers
     rm -f Install*PortMaster.sh
 
-    makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.PortMaster.sh" "PortMaster Installer" ./installer.sh
+    makeself-2.5.0/makeself.sh --header "build/tools/makeself-header.sh" pm_release "Install.PortMaster.sh" "PortMaster Installer" ./installer.sh
 
     if [ -z "$NO_FULL_INSTALL" ]; then
         for arch in "aarch64" "x86_64"; do
@@ -123,7 +123,7 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
             cp "../runtimes.${RUNTIME_ARCH}.zip" runtimes.zip
             cd ..
 
-            makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.Full${SCRIPT_NAME}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
+            makeself-2.5.0/makeself.sh --header "build/tools/makeself-header.sh" pm_release "Install.Full${SCRIPT_NAME}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
         done
     fi
 
@@ -134,7 +134,7 @@ if [[ ! -f "version.json" ]]; then
     wget "https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/version.json"
 fi
 
-python3 tools/pm_version.py $*
+python3 build/tools/pm_version.py $*
 
 # Restore this file
 mv PortMaster/pugwash{.bak,}

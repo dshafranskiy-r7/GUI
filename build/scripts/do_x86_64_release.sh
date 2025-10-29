@@ -39,8 +39,8 @@ cd RD_PM/
 unzip "$PORTMASTER_ZIP"
 
 cd PortMaster
-cp retrodeck/control.txt control.txt
-cp retrodeck/PortMaster.txt PortMaster.sh
+cp "$RESTORE_DIR/resources/platforms/retrodeck/control.txt" control.txt
+cp "$RESTORE_DIR/resources/platforms/retrodeck/PortMaster.txt" PortMaster.sh
 rm tasksetter
 touch tasksetter
 
