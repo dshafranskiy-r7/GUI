@@ -37,6 +37,7 @@ dependencies = [
     "PySDL2==0.9.15",
     "pysdl2-dll==2.32.0",
     "pypng==0.20220715.0",
+    "python-gettext==5.0"
 ]
 
 [project.optional-dependencies]
