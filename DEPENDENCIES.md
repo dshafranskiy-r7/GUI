@@ -9,6 +9,9 @@ This document provides visual diagrams of the dependencies and execution flows i
 3. [Runtime Execution Flow](#runtime-execution-flow)
 4. [Platform-Specific Builds](#platform-specific-builds)
 5. [Script Interactions](#script-interactions)
+6. [Harbourmaster Module Architecture](#harbourmaster-module-architecture)
+7. [GUI Architecture](#gui-architecture)
+8. [File Dependencies](#file-dependencies)
 
 ---
 
