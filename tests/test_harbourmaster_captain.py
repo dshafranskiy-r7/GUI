@@ -35,7 +35,7 @@ class TestCheckPort(unittest.TestCase):
         """Helper to create a test zip file"""
         temp_zip = tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.zip')
         temp_zip.close()
-        
+
         with zipfile.ZipFile(temp_zip.name, 'w') as zf:
             for filename, content in files.items():
                 if isinstance(content, str):
@@ -45,7 +45,7 @@ class TestCheckPort(unittest.TestCase):
                 elif content is None:
                     # Create an empty file
                     zf.writestr(filename, "")
-        
+
         return temp_zip.name
 
     def test_check_port_valid(self):
@@ -59,15 +59,15 @@ class TestCheckPort(unittest.TestCase):
                 'desc': 'A test port'
             }
         }
-        
+
         files = {
             'testport/': None,
             'testport/port.json': json.dumps(port_json),
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             result = captain.check_port('testport', zip_file)
             self.assertIsNotNone(result)
@@ -83,9 +83,9 @@ class TestCheckPort(unittest.TestCase):
             'testport/': None,
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             with self.assertRaises(captain.BadPort):
                 captain.check_port('testport', zip_file)
@@ -99,9 +99,9 @@ class TestCheckPort(unittest.TestCase):
             'testport/': None,
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             with self.assertRaises(captain.BadPort):
                 captain.check_port('testport', zip_file)
@@ -115,9 +115,9 @@ class TestCheckPort(unittest.TestCase):
             'testport/': None,
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             with self.assertRaises(captain.BadPort):
                 captain.check_port('testport', zip_file)
@@ -129,9 +129,9 @@ class TestCheckPort(unittest.TestCase):
         files = {
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             with self.assertRaises(captain.BadPort):
                 captain.check_port('testport', zip_file)
@@ -144,9 +144,9 @@ class TestCheckPort(unittest.TestCase):
             'testport/': None,
             'testport/readme.txt': 'test'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             with self.assertRaises(captain.BadPort):
                 captain.check_port('testport', zip_file)
@@ -161,16 +161,16 @@ class TestCheckPort(unittest.TestCase):
             'items': [],
             'attr': {}
         }
-        
+
         files = {
             'testport/': None,
             'testport/port.json': json.dumps(port_json),
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
         extra_info = {}
-        
+
         try:
             result = captain.check_port('testport', zip_file, extra_info=extra_info)
             self.assertIsNotNone(result)
@@ -187,17 +187,17 @@ class TestCheckPort(unittest.TestCase):
             'items': [],
             'attr': {}
         }
-        
+
         files = {
             'testport/': None,
             'testport/port.json': json.dumps(port_json),
             'testport/gameinfo.xml': '<game></game>',
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
         extra_info = {}
-        
+
         try:
             result = captain.check_port('testport', zip_file, extra_info=extra_info)
             self.assertIsNotNone(result)
@@ -211,9 +211,9 @@ class TestCheckPort(unittest.TestCase):
             'testport/': None,
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             result = captain.check_port('testport', zip_file)
             self.assertIsNotNone(result)
@@ -229,9 +229,9 @@ class TestCheckPort(unittest.TestCase):
             'testport/port.json': 'not valid json',
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
-        
+
         try:
             with self.assertRaises(captain.BadPort):
                 captain.check_port('testport', zip_file)
@@ -246,16 +246,16 @@ class TestCheckPort(unittest.TestCase):
             'items': [],
             'attr': {}
         }
-        
+
         files = {
             'testport/': None,
             'port.json': json.dumps(port_json),
             'run.sh': '#!/bin/bash\necho "test"'
         }
-        
+
         zip_file = self._create_test_zip(files)
         extra_info = {}
-        
+
         try:
             result = captain.check_port('testport', zip_file, extra_info=extra_info)
             self.assertIsNotNone(result)

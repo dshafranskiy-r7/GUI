@@ -67,11 +67,11 @@ class TestPortInfoLoad(unittest.TestCase):
                 'desc': 'Test description'
             }
         }
-        
+
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             json.dump(test_info, f)
             temp_file = f.name
-        
+
         try:
             result = info.port_info_load(Path(temp_file))
             self.assertIsNotNone(result)
@@ -84,7 +84,7 @@ class TestPortInfoLoad(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             f.write("not valid json")
             temp_file = f.name
-        
+
         try:
             result = info.port_info_load(Path(temp_file))
             self.assertIsNone(result)
@@ -96,7 +96,7 @@ class TestPortInfoLoad(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             f.write("not valid json")
             temp_file = f.name
-        
+
         try:
             result = info.port_info_load(Path(temp_file), do_default=True)
             self.assertIsNotNone(result)
@@ -115,7 +115,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'runtime': None
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertGreaterEqual(result['version'], 2)
@@ -131,7 +131,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'runtime': None
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertGreaterEqual(result['version'], 3)
@@ -146,7 +146,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'runtime': None
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertEqual(result['version'], 4)
@@ -159,7 +159,7 @@ class TestPortInfoLoad(unittest.TestCase):
             'name': 'test_port',
             'attr': {}
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNone(result)
 
@@ -173,7 +173,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'porter': 'John Doe'
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertIsInstance(result['attr']['porter'], list)
@@ -189,7 +189,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'runtime': 'mono'
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertIsInstance(result['attr']['runtime'], list)
@@ -203,7 +203,7 @@ class TestPortInfoLoad(unittest.TestCase):
             'items': ['/etc/passwd', '../../../etc/passwd', 'valid_file.sh'],
             'attr': {}
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         # Should remove bad paths
@@ -218,7 +218,7 @@ class TestPortInfoLoad(unittest.TestCase):
             'items': [],
             'attr': {}
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertIsInstance(result['version'], int)
@@ -233,7 +233,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'reqs': {'req1': True, 'req2': False}
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertIsInstance(result['attr']['reqs'], list)
@@ -248,7 +248,7 @@ class TestPortInfoLoad(unittest.TestCase):
                 'runtime': 'blank'
             }
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         # Should be converted to list
@@ -265,7 +265,7 @@ class TestPortInfoLoad(unittest.TestCase):
             'source': 'http://example.com',
             'attr': {}
         }
-        
+
         result = info.port_info_load(test_info, source_name="test")
         self.assertIsNotNone(result)
         self.assertIn('status', result)

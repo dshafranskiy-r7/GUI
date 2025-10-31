@@ -24,3 +24,4 @@ per-file-ignores =
     PortMaster/pylibs/harbourmaster/hardware.py:E201,E241
     PortMaster/pugwash:E402
     PortMaster/harbourmaster:E402
+    tests/*:E402

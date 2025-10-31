@@ -36,7 +36,7 @@ class TestJsonFunctions(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             json.dump({"test": "data"}, f)
             temp_file = f.name
-        
+
         try:
             with open(temp_file, 'r') as f:
                 result = util.json_safe_load(f)
@@ -49,7 +49,7 @@ class TestJsonFunctions(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             f.write("not valid json")
             temp_file = f.name
-        
+
         try:
             with open(temp_file, 'r') as f:
                 result = util.json_safe_load(f)
@@ -67,7 +67,7 @@ class TestFetchFunctions(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_get.return_value = mock_response
-        
+
         result = util.fetch("http://example.com")
         self.assertIsNotNone(result)
         self.assertEqual(result.status_code, 200)
@@ -78,7 +78,7 @@ class TestFetchFunctions(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
-        
+
         result = util.fetch("http://example.com")
         self.assertIsNone(result)
 
@@ -87,7 +87,7 @@ class TestFetchFunctions(unittest.TestCase):
         """Test fetch with connection error"""
         import requests
         mock_get.side_effect = requests.exceptions.ConnectionError("Connection failed")
-        
+
         result = util.fetch("http://example.com")
         self.assertIsNone(result)
 
@@ -97,7 +97,7 @@ class TestFetchFunctions(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.content = b"test content"
         mock_fetch.return_value = mock_response
-        
+
         result = util.fetch_data("http://example.com")
         self.assertEqual(result, b"test content")
 
@@ -107,7 +107,7 @@ class TestFetchFunctions(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.json.return_value = {"test": "data"}
         mock_fetch.return_value = mock_response
-        
+
         result = util.fetch_json("http://example.com")
         self.assertEqual(result, {"test": "data"})
 
@@ -117,7 +117,7 @@ class TestFetchFunctions(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.text = "test text"
         mock_fetch.return_value = mock_response
-        
+
         result = util.fetch_text("http://example.com")
         self.assertEqual(result, "test text")
 
@@ -125,7 +125,7 @@ class TestFetchFunctions(unittest.TestCase):
     def test_fetch_data_none(self, mock_fetch):
         """Test fetch_data returns None when fetch fails"""
         mock_fetch.return_value = None
-        
+
         result = util.fetch_data("http://example.com")
         self.assertIsNone(result)
 
@@ -252,7 +252,7 @@ class TestPMSignatureFunctions(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
             f.write("test")
             temp_file = f.name
-        
+
         try:
             result = util.load_pm_signature(temp_file)
             self.assertIsNone(result)
@@ -266,7 +266,7 @@ class TestPMSignatureFunctions(unittest.TestCase):
             f.write("# PORTMASTER: test, signature\n")
             f.write("echo 'test'\n")
             temp_file = f.name
-        
+
         try:
             result = util.load_pm_signature(temp_file)
             self.assertEqual(result, ["test", "signature"])
@@ -279,7 +279,7 @@ class TestPMSignatureFunctions(unittest.TestCase):
             f.write("#!/bin/bash\n")
             f.write("echo 'test'\n")
             temp_file = f.name
-        
+
         try:
             result = util.load_pm_signature(temp_file)
             self.assertIsNone(result)
@@ -292,7 +292,7 @@ class TestPMSignatureFunctions(unittest.TestCase):
             f.write("#!/bin/bash\n")
             f.write("echo 'test'\n")
             temp_file = f.name
-        
+
         try:
             util.add_pm_signature(temp_file, ["new", "signature"])
             result = util.load_pm_signature(temp_file)
@@ -307,7 +307,7 @@ class TestPMSignatureFunctions(unittest.TestCase):
             f.write("# PORTMASTER: old, signature\n")
             f.write("echo 'test'\n")
             temp_file = f.name
-        
+
         try:
             util.add_pm_signature(temp_file, ["new", "signature"])
             result = util.load_pm_signature(temp_file)
@@ -322,7 +322,7 @@ class TestPMSignatureFunctions(unittest.TestCase):
             f.write("# PORTMASTER: test, signature\n")
             f.write("echo 'test'\n")
             temp_file = f.name
-        
+
         try:
             util.remove_pm_signature(temp_file)
             result = util.load_pm_signature(temp_file)
