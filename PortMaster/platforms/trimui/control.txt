@@ -38,5 +38,5 @@ get_controls() {
 source $controlfolder/device_info.txt
 source $controlfolder/funcs.txt
 
-export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/libinterpose.aarch64.so $controlfolder/gptokeyb2 $ESUDOKILL"
-export GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/archs/aarch64/libinterpose.aarch64.so $controlfolder/archs/aarch64/gptokeyb2 $ESUDOKILL"
+export GPTOKEYB="$ESUDO $controlfolder/archs/aarch64/gptokeyb $ESUDOKILL"

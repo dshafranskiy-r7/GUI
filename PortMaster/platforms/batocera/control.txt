@@ -17,10 +17,10 @@ if ! grep 'gamecontrollerdb.txt' /usr/lib/python3.11/site-packages/configgen/gen
 
   if ! grep 'from generators.Generator import Generator' /usr/lib/python3.11/site-packages/configgen/generators/sh/shGenerator.py; then
     # New style relative imports
-    cp -f $controlfolder/batocera/shGenerator.py /usr/lib/python3.11/site-packages/configgen/generators/sh/shGenerator.py
+    cp -f $controlfolder/platforms/batocera/shGenerator.py /usr/lib/python3.11/site-packages/configgen/generators/sh/shGenerator.py
   else
     # Old style absolute imports
-    cp -f $controlfolder/knulli/shGenerator.py /usr/lib/python3.11/site-packages/configgen/generators/sh/shGenerator.py
+    cp -f $controlfolder/platforms/knulli/shGenerator.py /usr/lib/python3.11/site-packages/configgen/generators/sh/shGenerator.py
   fi
 
   batocera-save-overlay
@@ -31,12 +31,12 @@ if [ -f "$HOME/.config/gamecontrollerdb.txt" ]; then
 elif [ -f "/tmp/gamecontrollerdb.txt" ]; then
   export SDL_GAMECONTROLLERCONFIG_FILE="/tmp/gamecontrollerdb.txt"
 else
-  export SDL_GAMECONTROLLERCONFIG_FILE="/$controlfolder/knulli/gamecontrollerdb.txt"
+  export SDL_GAMECONTROLLERCONFIG_FILE="/$controlfolder/platforms/batocera/gamecontrollerdb.txt"
 fi
 
 SDLDBFILE="${SDL_GAMECONTROLLERCONFIG_FILE}"
 SDLDBUSERFILE="${HOME}/.config/SDL-GameControllerDB/gamecontrollerdb.txt"
-[[ ! -f "${SDLDBUSERFILE}" ]] && SDLDBUSERFILE="$SDL_GAMECONTROLLERCONFIG_FILE"
+[ ! -f "${SDLDBUSERFILE}" ] && SDLDBUSERFILE="$SDL_GAMECONTROLLERCONFIG_FILE"
 
 get_controls() {
   # TODO: figure out SDL_GAMECONTROLLERCONFIG
@@ -48,8 +48,23 @@ get_controls() {
   sdl_controllerconfig="$(< "${SDL_GAMECONTROLLERCONFIG_FILE}")"
 }
 
+if [ -e "/lib/ld-linux-x86-64.so.2" ]; then
+  # CRUSH KILL DESTROY
+  if [ -f "$controlfolder/archs/x86_64/gptokeyb.x86_64" ]; then
+    mv "$controlfolder/archs/x86_64/gptokeyb.x86_64" "$controlfolder/archs/x86_64/gptokeyb"
+  fi
+
+  if [ -f "$controlfolder/archs/x86_64/gptokeyb2.x86_64" ]; then
+    mv "$controlfolder/archs/x86_64/gptokeyb2.x86_64" "$controlfolder/archs/x86_64/gptokeyb2"
+  fi
+
+  if [ -f "$controlfolder/archs/x86_64/xdelta3.x86_64" ]; then
+    mv "$controlfolder/archs/x86_64/xdelta3.x86_64" "$controlfolder/archs/x86_64/xdelta3"
+  fi
+fi
+
 source $controlfolder/device_info.txt
 source $controlfolder/funcs.txt
 
-export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/libinterpose.${DEVICE_ARCH}.so $controlfolder/gptokeyb2 $ESUDOKILL"
-export GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/archs/${DEVICE_ARCH}/libinterpose.${DEVICE_ARCH}.so $controlfolder/archs/${DEVICE_ARCH}/gptokeyb2 $ESUDOKILL"
+export GPTOKEYB="$ESUDO $controlfolder/archs/${DEVICE_ARCH}/gptokeyb $ESUDOKILL"

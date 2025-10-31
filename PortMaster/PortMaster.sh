@@ -17,7 +17,7 @@ fi
 
 source $controlfolder/control.txt
 
-[ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
+[ -f "${controlfolder}/platforms/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/platforms/mod_${CFW_NAME}.txt"
 
 get_controls
 

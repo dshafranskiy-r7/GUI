@@ -39,9 +39,9 @@ cd mnt/mmc/MUOS/
 unzip "$PORTMASTER_ZIP"
 
 cd PortMaster
-cp muos/control.txt control.txt
-cp muos/control.txt "$RESTORE_DIR/muos_build/roms/ports/PortMaster/control.txt"
-cp muos/PortMaster.txt PortMaster.sh
+cp platforms/muos/control.txt control.txt
+cp platforms/muos/control.txt "$RESTORE_DIR/muos_build/roms/ports/PortMaster/control.txt"
+cp platforms/muos/PortMaster.txt PortMaster.sh
 rm tasksetter
 touch tasksetter
 

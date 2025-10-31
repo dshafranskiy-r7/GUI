@@ -86,22 +86,22 @@ source $controlfolder/funcs.txt
 # HACKY MC HACK FACE, 2.0
 if [ "$DEVICE_HAS_AARCH64" == "N" ]; then
   # CRUSH KILL DESTROY
-  if [ -f "$controlfolder/gptokeyb.armhf" ]; then
-    mv "$controlfolder/gptokeyb.armhf" "$controlfolder/gptokeyb"
+  if [ -f "$controlfolder/archs/armhf/gptokeyb.armhf" ]; then
+    mv "$controlfolder/archs/armhf/gptokeyb.armhf" "$controlfolder/archs/armhf/gptokeyb"
   fi
 
-  if [ -f "$controlfolder/gptokeyb2.armhf" ]; then
-    mv "$controlfolder/gptokeyb2.armhf" "$controlfolder/gptokeyb2"
+  if [ -f "$controlfolder/archs/armhf/gptokeyb2.armhf" ]; then
+    mv "$controlfolder/archs/armhf/gptokeyb2.armhf" "$controlfolder/archs/armhf/gptokeyb2"
   fi
 
-  if [ -f "$controlfolder/xdelta3.armhf" ]; then
-    mv "$controlfolder/xdelta3.armhf" "$controlfolder/xdelta3"
+  if [ -f "$controlfolder/archs/armhf/xdelta3.armhf" ]; then
+    mv "$controlfolder/archs/armhf/xdelta3.armhf" "$controlfolder/archs/armhf/xdelta3"
   fi
 else
-  if [ -f "$controlfolder/muos/mount" ]; then
-    rm -f "$controlfolder/muos/mount"
+  if [ -f "$controlfolder/platforms/muos/mount" ]; then
+    rm -f "$controlfolder/platforms/muos/mount"
   fi
 fi
 
-export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/libinterpose.${DEVICE_ARCH}.so $controlfolder/gptokeyb2 $ESUDOKILL"
-export GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/archs/${DEVICE_ARCH}/libinterpose.${DEVICE_ARCH}.so $controlfolder/archs/${DEVICE_ARCH}/gptokeyb2 $ESUDOKILL"
+export GPTOKEYB="$ESUDO $controlfolder/archs/${DEVICE_ARCH}/gptokeyb $ESUDOKILL"

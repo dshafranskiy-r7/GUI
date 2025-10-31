@@ -210,7 +210,7 @@ fi
 ## Get current resolution
 # Moved this up to allow some fixes that rely on it.
 
-RESOLUTION=$("$SCRIPT_DIR/sdl_resolution.$DEVICE_ARCH" 2> /dev/null | grep -a 'Current' | awk -F ': ' '{print $2}')
+RESOLUTION=$("$SCRIPT_DIR/archs/${DEVICE_ARCH}/sdl_resolution.$DEVICE_ARCH" 2> /dev/null | grep -a 'Current' | awk -F ': ' '{print $2}')
 
 unset SCRIPT_DIR
 
