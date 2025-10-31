@@ -40,10 +40,10 @@ unzip "$PORTMASTER_ZIP"
 cd PortMaster
 rm -f PortMaster.sh
 
-cp trimui/control.txt control.txt
-cp trimui/PortMaster.txt ../launch.sh
-cp trimui/config.json ../config.json
-cp trimui/icon.png ../icon.png
+cp platforms/trimui/control.txt control.txt
+cp platforms/trimui/PortMaster.txt ../launch.sh
+cp platforms/trimui/config.json ../config.json
+cp platforms/trimui/icon.png ../icon.png
 
 rm tasksetter
 touch tasksetter
