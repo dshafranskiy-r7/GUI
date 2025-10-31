@@ -76,19 +76,19 @@ zip -9r PortMaster.zip PortMaster/ \
 if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     echo "Creating Installers"
 
-    for arch in "aarch64" "x86_64"; do
-        export RUNTIME_ARCH="$arch"
+    # Target architecture for builds
+    RUNTIME_ARCH="x86_64"
+    export RUNTIME_ARCH
 
-        if [ ! -f "runtimes.${RUNTIME_ARCH}.zip" ]; then
-            echo "Downloading Runtimes for $RUNTIME_ARCH."
-            mkdir -p runtimes
-            cd runtimes
-            ../tools/download_runtimes.sh
-            zip -9 "../runtimes.${RUNTIME_ARCH}.zip" *
-            cd ..
-            rm -fRv runtimes
-        fi
-    done
+    if [ ! -f "runtimes.${RUNTIME_ARCH}.zip" ]; then
+        echo "Downloading Runtimes for $RUNTIME_ARCH."
+        mkdir -p runtimes
+        cd runtimes
+        ../tools/download_runtimes.sh
+        zip -9 "../runtimes.${RUNTIME_ARCH}.zip" *
+        cd ..
+        rm -fRv runtimes
+    fi
 
     if [ ! -d "makeself-2.5.0" ]; then
         echo "Downloading makeself"
@@ -110,21 +110,13 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.PortMaster.sh" "PortMaster Installer" ./installer.sh
 
     if [ -z "$NO_FULL_INSTALL" ]; then
-        for arch in "aarch64" "x86_64"; do
-            export RUNTIME_ARCH="$arch"
+        INSTALLER_SUFFIX=".${RUNTIME_ARCH}"
 
-            if [ "$RUNTIME_ARCH" = "aarch64" ]; then
-                SCRIPT_NAME=""
-            else
-                SCRIPT_NAME=".${RUNTIME_ARCH}"
-            fi
+        cd pm_release
+        cp "../runtimes.${RUNTIME_ARCH}.zip" runtimes.zip
+        cd ..
 
-            cd pm_release
-            cp "../runtimes.${RUNTIME_ARCH}.zip" runtimes.zip
-            cd ..
-
-            makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.Full${SCRIPT_NAME}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
-        done
+        makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.Full${INSTALLER_SUFFIX}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
     fi
 
     rm -fRv pm_release
