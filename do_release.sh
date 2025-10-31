@@ -76,7 +76,9 @@ zip -9r PortMaster.zip PortMaster/ \
 if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     echo "Creating Installers"
 
-    export RUNTIME_ARCH="x86_64"
+    # Target architecture for builds
+    RUNTIME_ARCH="x86_64"
+    export RUNTIME_ARCH
 
     if [ ! -f "runtimes.${RUNTIME_ARCH}.zip" ]; then
         echo "Downloading Runtimes for $RUNTIME_ARCH."
@@ -108,13 +110,13 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.PortMaster.sh" "PortMaster Installer" ./installer.sh
 
     if [ -z "$NO_FULL_INSTALL" ]; then
-        SCRIPT_NAME=".${RUNTIME_ARCH}"
+        INSTALLER_SUFFIX=".${RUNTIME_ARCH}"
 
         cd pm_release
         cp "../runtimes.${RUNTIME_ARCH}.zip" runtimes.zip
         cd ..
 
-        makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.Full${SCRIPT_NAME}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
+        makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.Full${INSTALLER_SUFFIX}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
     fi
 
     rm -fRv pm_release

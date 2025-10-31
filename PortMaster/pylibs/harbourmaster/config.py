@@ -28,7 +28,7 @@ HM_UPDATE_FREQUENCY=(60 * 60 * 1)  # Only check automatically once per hour.
 HM_TESTING=False
 HM_PERFTEST=False
 
-## Maximum temporary size
+## Maximum temporary size (100 MB)
 HM_MAX_TEMP_SIZE = 1024 * 1024 * 100
 
 ################################################################################
@@ -51,7 +51,7 @@ if (Path().cwd() / '.git').is_dir():
     HM_TESTING=True
 
 elif Path("/userdata/roms/ports").is_dir():
-    ## Batocera (x86_64)
+    ## Batocera
     HM_DEFAULT_TOOLS_DIR   = Path(os.environ['XDG_DATA_HOME'])
     HM_DEFAULT_PORTS_DIR   = Path("/userdata/roms/ports")
     HM_DEFAULT_SCRIPTS_DIR = Path("/userdata/roms/ports")
