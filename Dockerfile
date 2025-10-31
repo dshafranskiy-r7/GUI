@@ -39,7 +39,7 @@ RUN bash -x ./do_release.sh
 
 # Run do_x86_64_release.sh to build x86_64 specific release
 # This script expects PortMaster.zip to exist (created by do_release.sh)
-RUN bash -x ./do_x86_64_release.sh || echo "do_x86_64_release.sh completed with code $?"
+RUN bash -x ./do_x86_64_release.sh
 
 # Extract PortMaster.zip to /app
 WORKDIR /app

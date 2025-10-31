@@ -69,7 +69,7 @@ docker run --rm portmaster-test ./harbourmaster help
 The PortMaster.sh script can be run in the container:
 
 ```bash
-docker run --rm portmaster-test bash -c "./PortMaster.sh; echo Exit code: \$?"
+docker run --rm portmaster-test bash -c './PortMaster.sh; echo Exit code: $?'
 ```
 
 Note: The GUI (pugwash) requires SDL2 rendering which is not available in a headless Docker environment. The script will log an SDL error but still exits with code 0 (success), which is the expected behavior for testing purposes.
