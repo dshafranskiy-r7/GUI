@@ -164,7 +164,7 @@ class HarbourMaster():
         version = self.cfg_data.get('version', 1)
         if version:
             # Upgrade from version 1 to 2
-            logger.debug(f"Upgrading PortMaster/config/config.json: 1 -> 2")
+            logger.debug("Upgrading PortMaster/config/config.json: 1 -> 2")
 
             for image_dir in self.cfg_dir.glob("images_*"):
                 if not image_dir.is_dir():
@@ -558,7 +558,7 @@ class HarbourMaster():
 
         Phase 1:
         - Load all *.port.json files, fix any issues with them
-    
+
         Phase 2:
         - Check all files/dirs in the ports_dir, see if they are "owned" by a port, find any renamed files.
 
@@ -1248,7 +1248,8 @@ class HarbourMaster():
             # if port_info is None:
             #     continue
 
-            ports_list[port_name] = port_info            
+            ports_list[port_name] = port_info
+
 
         ports = {
             port_name: port_info
@@ -2257,9 +2258,9 @@ class HarbourMaster():
         output.append(f'<r>porter</r>="<y>{oc_join(port_info["attr"]["porter"])}</y>"')
         output.append(f'<r>locat</r>="<y>{nice_value(port_info["name"])}</y>"')
         if port_info["attr"]['rtr']:
-            output.append(f'<r>runtype</r>="<e>rtr</e>"')
+            output.append('<r>runtype</r>="<e>rtr</e>"')
         if port_info["attr"]['runtime'] == "mono-6.12.0.122-aarch64.squashfs":
-            output.append(f'<r>mono</r>="<e>y</e>"')
+            output.append('<r>mono</r>="<e>y</e>"')
 
         output.append(f'<r>genres</r>="<m>{",".join(port_info["attr"]["genres"])}</m>"')
 
