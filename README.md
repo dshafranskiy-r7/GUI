@@ -25,6 +25,10 @@ PortMaster is a convenient script designed to facilitate the downloading and ins
 - **Custom Sources**: want to control your own ports repository? no worries!
 - **Platform Hooks**: PortMaster on raspberry pi? Lets gooooo.
 
+# Developer Documentation
+
+- **[Dependency Diagrams](DEPENDENCIES.md)**: Visual diagrams showing the architecture, build flows, and dependencies in this repository
+
 # Installation
 
 [Install](https://portmaster.games/installation.html)
