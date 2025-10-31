@@ -131,7 +131,7 @@ pm_show_error() {
 
 pm_end_splash() {
     # Kills any splashscreen running.
-    $ESUDO pkill -f "archs/${DEVICE_ARCH}/sdl2imgshow"
+    $ESUDO pkill -f "sdl2imgshow.${DEVICE_ARCH}"
 }
 
 
