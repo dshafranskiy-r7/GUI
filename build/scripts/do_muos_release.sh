@@ -5,11 +5,11 @@
 
 RESTORE_DIR=$PWD
 
-rm trimui.portmaster.zip
+rm muos.portmaster.zip
 
-mkdir trimui_build
+mkdir muos_build
 
-cd trimui_build
+cd muos_build
 
 if [[ "$1" == "stable" ]]; then
     wget "https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/version.json"
@@ -31,26 +31,23 @@ else
     exit 255
 fi
 
-mkdir -p Apps/PortMaster
+mkdir -p mnt/mmc/MUOS/
+mkdir -p roms/ports/PortMaster/
 
-cd Apps/PortMaster
+cd mnt/mmc/MUOS/
 
 unzip "$PORTMASTER_ZIP"
 
 cd PortMaster
-rm -f PortMaster.sh
-
-cp trimui/control.txt control.txt
-cp trimui/PortMaster.txt ../launch.sh
-cp trimui/config.json ../config.json
-cp trimui/icon.png ../icon.png
-
+cp "$RESTORE_DIR/resources/platforms/muos/control.txt" control.txt
+cp "$RESTORE_DIR/resources/platforms/muos/control.txt" "$RESTORE_DIR/muos_build/roms/ports/PortMaster/control.txt"
+cp "$RESTORE_DIR/resources/platforms/muos/PortMaster.txt" PortMaster.sh
 rm tasksetter
 touch tasksetter
 
-cd "$RESTORE_DIR/trimui_build"
+cd "$RESTORE_DIR/muos_build"
 
-zip -9r "$RESTORE_DIR/trimui.portmaster.zip" Apps/
+zip -9r "$RESTORE_DIR/muos.portmaster.zip" roms/ mnt/
 cd $RESTORE_DIR
 
-rm -fRv trimui_build/
+rm -fRv muos_build/

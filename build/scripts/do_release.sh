@@ -2,6 +2,18 @@
 #
 # SPDX-License-Identifier: MIT
 #
+# PortMaster Release Build Script
+# 
+# This script should be run from the repository root directory.
+# It creates PortMaster.zip for distribution.
+#
+# The restructured repository layout:
+# - build/scripts/ - Build scripts (this file)
+# - build/tools/ - Build utilities  
+# - dependencies/exlibs/ - External Python libraries
+# - resources/binaries/ - Platform-specific executables
+# - resources/platforms/ - OS-specific configurations
+#
 
 # Directory where .pot file is located
 POT_DIR="PortMaster/pylibs/locales"
@@ -9,7 +21,7 @@ POT_FILES=("messages" "themes")
 
 cp PortMaster/pugwash{,.bak}
 
-python3 tools/pm_release.py $*
+python3 build/tools/pm_release.py $*
 
 awk -F"'" '/PORTMASTER_VERSION = / {print $2}' PortMaster/pugwash > PortMaster/version
 cp PortMaster/version version
@@ -48,18 +60,29 @@ for lang_dir in $POT_DIR/* ; do
 done
 
 echo "Creating pylibs.zip"
-cd PortMaster
+# Create temporary structure for packaging
+rm -rf /tmp/pm_pylibs_pkg
+mkdir -p /tmp/pm_pylibs_pkg
+cp -r PortMaster/pylibs /tmp/pm_pylibs_pkg/
+cp -r dependencies/exlibs /tmp/pm_pylibs_pkg/
 
-rm -f pylibs.zip
-zip -9r pylibs.zip exlibs/ pylibs/ \
+cd /tmp/pm_pylibs_pkg
+zip -9r /tmp/pylibs.zip exlibs/ pylibs/ \
     -x \*__pycache__\*/\* \
     -x \*.DS_Store \
     -x ._\* \
     -x \*NotoSans\*.ttf
 
+mv /tmp/pylibs.zip "$OLDPWD/PortMaster/pylibs.zip"
+cd "$OLDPWD"
+rm -rf /tmp/pm_pylibs_pkg
+
 cd ..
 
 echo "Creating PortMaster.zip"
+# First, temporarily copy config files to PortMaster for packaging
+cp resources/platforms/config/*.txt PortMaster/
+
 zip -9r PortMaster.zip PortMaster/ \
     -x PortMaster/pylibs/\* \
     -x PortMaster/exlibs/\* \
@@ -73,6 +96,9 @@ zip -9r PortMaster.zip PortMaster/ \
     -x PortMaster/harbourmaster.txt \
     -x '*.DS_Store'
 
+# Remove temporary files
+rm PortMaster/mod_*.txt PortMaster/libgl_*.txt
+
 if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     echo "Creating Installers"
 
@@ -83,7 +109,7 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
             echo "Downloading Runtimes for $RUNTIME_ARCH."
             mkdir -p runtimes
             cd runtimes
-            ../tools/download_runtimes.sh
+            ../build/tools/download_runtimes.sh
             zip -9 "../runtimes.${RUNTIME_ARCH}.zip" *
             cd ..
             rm -fRv runtimes
@@ -101,13 +127,13 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
     mkdir -p pm_release
     cd pm_release
     cp ../PortMaster.zip .
-    cp ../tools/installer.sh .
+    cp ../build/tools/installer.sh .
     cd ..
 
     # Remove old installers
     rm -f Install*PortMaster.sh
 
-    makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.PortMaster.sh" "PortMaster Installer" ./installer.sh
+    makeself-2.5.0/makeself.sh --header "build/tools/makeself-header.sh" pm_release "Install.PortMaster.sh" "PortMaster Installer" ./installer.sh
 
     if [ -z "$NO_FULL_INSTALL" ]; then
         for arch in "aarch64" "x86_64"; do
@@ -123,7 +149,7 @@ if [[ "$1" == "stable" ]] || [ "$MAKE_INSTALL" = "Y" ]; then
             cp "../runtimes.${RUNTIME_ARCH}.zip" runtimes.zip
             cd ..
 
-            makeself-2.5.0/makeself.sh --header "tools/makeself-header.sh" pm_release "Install.Full${SCRIPT_NAME}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
+            makeself-2.5.0/makeself.sh --header "build/tools/makeself-header.sh" pm_release "Install.Full${SCRIPT_NAME}.PortMaster.sh" "PortMaster Full Installer" ./installer.sh
         done
     fi
 
@@ -134,7 +160,7 @@ if [[ ! -f "version.json" ]]; then
     wget "https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/version.json"
 fi
 
-python3 tools/pm_version.py $*
+python3 build/tools/pm_version.py $*
 
 # Restore this file
 mv PortMaster/pugwash{.bak,}

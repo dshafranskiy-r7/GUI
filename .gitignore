@@ -8,7 +8,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -190,3 +189,10 @@ runtimes*.zip
 Install*PortMaster.sh
 *.portmaster.zip
 pm_devices.cfg
+
+# Build artifacts
+/pm_release/
+/muos_build/
+/trimui_build/
+/retrodeck_build/
+/runtimes/
