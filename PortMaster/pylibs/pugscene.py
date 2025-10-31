@@ -2060,8 +2060,6 @@ class FiltersScene(BaseScene):
             "mesa":             _("{runtime_name} Runtime").format(runtime_name="Mesa"),
 
             # Architecture
-            "armhf":            _("ARM 32bit"),
-            "aarch64":          _("ARM 64bit"),
             "x86_64":           _("x86 64bit"),
             }
 
@@ -2185,7 +2183,7 @@ class FiltersScene(BaseScene):
                         selected_offset = len(self.tags['filter_list'].options) - 1
 
             elif display_order == 'architecture':
-                for hm_genre in ['armhf', 'aarch64', 'x86_64']:
+                for hm_genre in ['x86_64']:
                     if hm_genre in self.locked_genres:
                         continue
 

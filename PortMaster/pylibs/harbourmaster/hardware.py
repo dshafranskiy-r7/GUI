@@ -208,43 +208,9 @@ def new_device_info():
 
 
 def old_device_info():
-    # Abandon all hope, ye who enter. 
+    # For x86_64, we default to 'pc'
+    return 'pc'
 
-    # From PortMaster/control.txt
-    if file_exists('/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick'):
-        if file_exists('/boot/rk3326-rg351v-linux.dtb') or safe_cat("/storage/.config/.OS_ARCH").strip().casefold() == "rg351v":
-            # RG351V
-            return "rg351v"
-
-        # RG351P/M
-        return "rg351p"
-
-    elif file_exists('/dev/input/by-path/platform-odroidgo2-joypad-event-joystick'):
-        if "190000004b4800000010000001010000" in safe_cat('/etc/emulationstation/es_input.cfg'):
-            return "oga"
-        else:
-            return "rk2020"
-
-        return "rgb10s"
-
-    elif file_exists('/dev/input/by-path/platform-odroidgo3-joypad-event-joystick'):
-        if ("rgb10max" in safe_cat('/etc/emulationstation/es_input.cfg').strip().casefold()):
-            return "rgb10max"
-
-        if file_exists('/opt/.retrooz/device'):
-            device = safe_cat("/opt/.retrooz/device").strip().casefold()
-            if "rgb10max2native" in device:
-                return "rgb10max"
-
-            if "rgb10max2top" in device:
-                return "rgb10max"
-
-        return "ogs"
-
-    elif file_exists('/dev/input/by-path/platform-gameforce-gamepad-event-joystick'):
-        return "chi"
-
-    return 'unknown'
 
 
 def _merge_info(info, new_info):
