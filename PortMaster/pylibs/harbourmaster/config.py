@@ -28,7 +28,7 @@ HM_UPDATE_FREQUENCY=(60 * 60 * 1)  # Only check automatically once per hour.
 HM_TESTING=False
 HM_PERFTEST=False
 
-## Maximum temporary size is 100 mb, this can cause errors on TrimUI and muOS.
+## Maximum temporary size
 HM_MAX_TEMP_SIZE = 1024 * 1024 * 100
 
 ################################################################################
@@ -49,70 +49,14 @@ if (Path().cwd() / '.git').is_dir():
     HM_DEFAULT_PORTS_DIR   = Path('ports/').absolute()
     HM_DEFAULT_SCRIPTS_DIR = Path('ports/').absolute()
     HM_TESTING=True
-    
-elif Path("/mnt/sdcard/spruce").is_dir():
-    ## Spruce (Miyoo Flip)
-    HM_DEFAULT_TOOLS_DIR   = Path("/mnt/SDCARD/Roms/.portmaster")
-    HM_DEFAULT_PORTS_DIR   = Path("/mnt/SDCARD/Roms/PORTS64")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/mnt/SDCARD/Roms/PORTS64")
-
-elif Path("/mnt/SDCARD/MIYOO_EX/PortMaster").is_dir():
-    ## TrimUI Smart Pro
-    HM_DEFAULT_TOOLS_DIR   = Path("/mnt/SDCARD/MIYOO_EX/PortMaster")
-    HM_DEFAULT_PORTS_DIR   = Path("/mnt/SDCARD/MIYOO_EX/ports")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/mnt/SDCARD/MIYOO_EX/ports")
-
-elif Path("/mnt/SDCARD/Apps/PortMaster").is_dir():
-    ## TrimUI Smart Pro
-    HM_DEFAULT_TOOLS_DIR   = Path("/mnt/SDCARD/Apps/PortMaster")
-    HM_DEFAULT_PORTS_DIR   = Path("/mnt/SDCARD/Data/ports")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/mnt/SDCARD/Data/ports")
 
 elif Path("/userdata/roms/ports").is_dir():
-    ## Batocera
+    ## Batocera (x86_64)
     HM_DEFAULT_TOOLS_DIR   = Path(os.environ['XDG_DATA_HOME'])
     HM_DEFAULT_PORTS_DIR   = Path("/userdata/roms/ports")
     HM_DEFAULT_SCRIPTS_DIR = Path("/userdata/roms/ports")
 
-elif Path("/opt/muos").is_dir():
-    ## muOS
-    HM_DEFAULT_TOOLS_DIR   = Path("/mnt/mmc/MUOS")
-    HM_DEFAULT_PORTS_DIR   = Path("/mnt/mmc/ports")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/mnt/mmc/ROMS/Ports")
-
-    MUOS_MMC_TOGGLE        = Path('/mnt/mmc/MUOS/PortMaster/config/muos_mmc_master_race.txt')
-
-    if not MUOS_MMC_TOGGLE.is_file() and '/mnt/sdcard' in subprocess.getoutput(['df']):
-        HM_DEFAULT_PORTS_DIR   = Path("/mnt/sdcard/ports")
-        HM_DEFAULT_SCRIPTS_DIR = Path("/mnt/sdcard/ROMS/Ports")
-
-elif Path("/opt/system/Tools").is_dir():
-    if Path("/roms2/tools").is_dir():
-        HM_DEFAULT_TOOLS_DIR   = Path("/roms2/tools")
-        HM_DEFAULT_PORTS_DIR   = Path("/roms2/ports")
-        HM_DEFAULT_SCRIPTS_DIR = Path("/roms2/ports")
-
-    else:
-        HM_DEFAULT_TOOLS_DIR   = Path("/roms/tools")
-        HM_DEFAULT_PORTS_DIR   = Path("/roms/ports")
-        HM_DEFAULT_SCRIPTS_DIR = Path("/roms/ports")
-
-elif Path("/opt/tools/PortMaster").is_dir():
-    HM_DEFAULT_TOOLS_DIR   = Path("/opt/tools")
-    HM_DEFAULT_PORTS_DIR   = Path("/roms/ports")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/roms/ports")
-
-elif Path("/storage/roms/ports_scripts").is_dir():
-    HM_DEFAULT_TOOLS_DIR   = Path("/storage/roms/ports")
-    HM_DEFAULT_PORTS_DIR   = Path("/storage/roms/ports")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/storage/roms/ports_scripts")
-
-elif Path("/storage/roms/ports").is_dir():
-    HM_DEFAULT_TOOLS_DIR   = Path("/storage/roms/ports")
-    HM_DEFAULT_PORTS_DIR   = Path("/storage/roms/ports")
-    HM_DEFAULT_SCRIPTS_DIR = Path("/storage/roms/ports")
-
-## Check if retrodeck.sh exists. Chose this file/location as platform independent from were retrodeck is installed.
+## Check if retrodeck.sh exists. Chose this file/location as platform independent from where retrodeck is installed.
 elif Path("/var/config/retrodeck/retrodeck.cfg").is_file() or (Path.home() / ".var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg").is_file():
     rdconfig=Path("/var/config/retrodeck/retrodeck.cfg")
     HM_DEFAULT_TOOLS_DIR = Path("/var/data")
