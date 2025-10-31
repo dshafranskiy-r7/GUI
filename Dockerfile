@@ -1,3 +1,14 @@
+# PortMaster Docker Testing Environment
+# 
+# This Dockerfile creates a testing environment that:
+# 1. Runs do_release.sh to build PortMaster.zip
+# 2. Runs do_x86_64_release.sh to build retrodeck.portmaster.zip
+# 3. Sets up required directories and configuration
+# 4. Runs PortMaster CLI (harbourmaster) to verify the build
+#
+# The container exits with code 0 (success) to indicate all builds completed successfully.
+# For detailed usage instructions, see Dockerfile.README.md
+
 FROM python:3.12
 
 # Update package list and install dependencies
@@ -44,6 +55,11 @@ RUN cp /app/PortMaster/control.txt /roms/ports/PortMaster/control.txt
 RUN cp /app/PortMaster/funcs.txt /roms/ports/PortMaster/funcs.txt
 RUN cp /app/PortMaster/device_info.txt /roms/ports/PortMaster/device_info.txt
 
+# Create symlink to pugwash in the control folder for PortMaster.sh to find it
+RUN ln -s /app/PortMaster/pugwash /roms/ports/PortMaster/pugwash
+RUN ln -s /app/PortMaster/harbourmaster /roms/ports/PortMaster/harbourmaster
+RUN ln -s /app/PortMaster/pylibs.zip /roms/ports/PortMaster/pylibs.zip
+
 # Create version file
 RUN echo "0.1.0" > /roms/ports/PortMaster/version
 
@@ -59,6 +75,6 @@ ENV SDL_AUDIODRIVER=dummy
 # Set working directory to PortMaster
 WORKDIR /app/PortMaster
 
-# Run harbourmaster in CLI mode to verify everything works
-# Using harbourmaster device_info to test the CLI interface
-CMD ["./harbourmaster", "--quiet", "device_info"]
+# Run a simple test to verify the build works
+# This demonstrates that both do_release.sh and do_x86_64_release.sh succeeded
+CMD bash -c "echo 'PortMaster Build Test' && echo 'Build artifacts:' && ls -lh /build/*.zip && echo '' && echo 'Testing harbourmaster CLI:' && ./harbourmaster --quiet device_info && echo '' && echo 'All tests passed!'"
