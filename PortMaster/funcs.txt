@@ -105,7 +105,7 @@ pm_begin_splash() {
         PM_SPLASH_THEME="$PM_RESOURCE_DIR/splash.ini"
     fi
 
-    $ESUDO "$controlfolder/sdl2imgshow.${DEVICE_ARCH}" -z "$PM_SPLASH_THEME" $PM_SPLASH_QUIT_MODE &
+    $ESUDO "$controlfolder/archs/${DEVICE_ARCH}/sdl2imgshow.${DEVICE_ARCH}" -z "$PM_SPLASH_THEME" $PM_SPLASH_QUIT_MODE &
 }
 
 
@@ -125,7 +125,7 @@ pm_show_error() {
     export PM_ERROR_TITLE="$1"
     export PM_ERROR_MESSAGE="$2" 
 
-    $ESUDO "$controlfolder/sdl2imgshow.${DEVICE_ARCH}" -z "$PM_ERROR_THEME" -wY
+    $ESUDO "$controlfolder/archs/${DEVICE_ARCH}/sdl2imgshow.${DEVICE_ARCH}" -z "$PM_ERROR_THEME" -wY
 }
 
 

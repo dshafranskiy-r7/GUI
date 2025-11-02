@@ -57,8 +57,8 @@ export sdl_controllerconfig="$(grep "$SDL_GAMECONTROLLERCONFIG_FILE" -e "${DEVIC
 echo "\$sdl_controllerconfig = $sdl_controllerconfig"
 
 # Enable mount hack :D
-export PATH="$controlfolder/retrodeck:$PATH"
-export LD_LIBRARY_PATH="$controlfolder/retrodeck:$LD_LIBRARY_PATH"
+export PATH="$controlfolder/platforms/retrodeck:$PATH"
+export LD_LIBRARY_PATH="$controlfolder/platforms/retrodeck:$LD_LIBRARY_PATH"
 
 get_controls() {
   ANALOGSTICKS="2"
@@ -66,22 +66,22 @@ get_controls() {
 }
 
 # CRUSH KILL DESTROY
-if [ -f "$controlfolder/gptokeyb.x86_64" ]; then
-  mv "$controlfolder/gptokeyb.x86_64" "$controlfolder/gptokeyb"
+if [ -f "$controlfolder/archs/x86_64/gptokeyb.x86_64" ]; then
+  mv "$controlfolder/archs/x86_64/gptokeyb.x86_64" "$controlfolder/archs/x86_64/gptokeyb"
 fi
 
-if [ -f "$controlfolder/gptokeyb2.x86_64" ]; then
-  mv "$controlfolder/gptokeyb2.x86_64" "$controlfolder/gptokeyb2"
+if [ -f "$controlfolder/archs/x86_64/gptokeyb2.x86_64" ]; then
+  mv "$controlfolder/archs/x86_64/gptokeyb2.x86_64" "$controlfolder/archs/x86_64/gptokeyb2"
 fi
 
 # CRUSH KILL DESTROY
-if [ -f "$controlfolder/xdelta3.x86_64" ]; then
-  mv "$controlfolder/xdelta3.x86_64" "$controlfolder/xdelta3"
+if [ -f "$controlfolder/archs/x86_64/xdelta3.x86_64" ]; then
+  mv "$controlfolder/archs/x86_64/xdelta3.x86_64" "$controlfolder/archs/x86_64/xdelta3"
 fi
 
 export PM_CAN_MOUNT="N"
 source $controlfolder/device_info.txt
 source $controlfolder/funcs.txt
 
-export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/libinterpose.${DEVICE_ARCH}.so $controlfolder/gptokeyb2 $ESUDOKILL"
-export GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/archs/${DEVICE_ARCH}/libinterpose.${DEVICE_ARCH}.so $controlfolder/archs/${DEVICE_ARCH}/gptokeyb2 $ESUDOKILL"
+export GPTOKEYB="$ESUDO $controlfolder/archs/${DEVICE_ARCH}/gptokeyb $ESUDOKILL"

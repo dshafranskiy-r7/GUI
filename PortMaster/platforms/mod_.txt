@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# SPDX-License-Identifier: MIT
+#
+
+## THIS FIXES ROCKNIX AND JELOS
+
+source $controlfolder/device_info.txt
+source $controlfolder/funcs.txt
+
+export GPTOKEYB2="$ESUDO env LD_PRELOAD=$controlfolder/archs/${DEVICE_ARCH}/libinterpose.${DEVICE_ARCH}.so $controlfolder/archs/${DEVICE_ARCH}/gptokeyb2 $ESUDOKILL"
+export GPTOKEYB="$ESUDO $controlfolder/archs/${DEVICE_ARCH}/gptokeyb $ESUDOKILL"
+
+[ ! -z "${CFW_NAME}" ] && [ -f "${controlfolder}/platforms/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/platforms/mod_${CFW_NAME}.txt"
