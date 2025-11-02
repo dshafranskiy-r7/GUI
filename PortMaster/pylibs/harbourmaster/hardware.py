@@ -273,7 +273,7 @@ def get_glibc_version():
 
             if not libc_path.is_file():
                 continue
-    
+
             try:
                 result = subprocess.run(
                     [str(libc_path), "--version"],
@@ -507,7 +507,8 @@ def new_device_info():
 
 
 def old_device_info():
-    # Abandon all hope, ye who enter. 
+    # Abandon all hope, ye who enter.
+
 
     # From PortMaster/control.txt
     if file_exists('/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick'):

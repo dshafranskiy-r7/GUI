@@ -49,7 +49,7 @@ if (Path().cwd() / '.git').is_dir():
     HM_DEFAULT_PORTS_DIR   = Path('ports/').absolute()
     HM_DEFAULT_SCRIPTS_DIR = Path('ports/').absolute()
     HM_TESTING=True
-    
+
 elif Path("/mnt/sdcard/spruce").is_dir():
     ## Spruce (Miyoo Flip)
     HM_DEFAULT_TOOLS_DIR   = Path("/mnt/SDCARD/Roms/.portmaster")
